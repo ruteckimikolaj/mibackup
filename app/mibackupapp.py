@@ -5,34 +5,37 @@ import sqlite3
 from sqlite3 import Error
 
 
+class ConDat:
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-db_path = os.path.join(BASE_DIR, "database.sqlite")
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(BASE_DIR, "database.sqlite")
 
+    def __init__(self, create_connection):
+        self._create_connection = create_connection
 
-def create_connection(default=db_path):
-    """
-    Create connection.
-    :param default: database path.
-    :return: connection object
-    """
-    global globconn
-    globconn = sqlite3.connect(default)
-    try:
+    def create_connection(default=db_path):
+        """
+        Create connection.
+        :param default: database path.
+        :return: connection object
+        """
+        global globconn
+        globconn = sqlite3.connect(default)
+        try:
 
-        cur = globconn.cursor()
-        print("connection established") # debuging purpose
-        cur.execute("CREATE TABLE IF NOT EXISTS directories("
-                    "pk INTEGER PRIMARY KEY,"
-                    " fromdir TEXT,"
-                    " todir TEXT,"
-                    " active INTEGER)")
-        globconn.commit()
-        print("table has been created if didnt exist") # deb purpose
-        return globconn
-    except Error as e:
-        print(e)
-        return None
+            cur = globconn.cursor()
+            print("connection established") # debuging purpose
+            cur.execute("CREATE TABLE IF NOT EXISTS directories("
+                        "pk INTEGER PRIMARY KEY,"
+                        " fromdir TEXT,"
+                        " todir TEXT,"
+                        " active INTEGER)")
+            globconn.commit()
+            print("table has been created if didnt exist") # deb purpose
+            return globconn
+        except Error as e:
+            print(e)
+            return None
 
 
 def create_database_entry(dir1, dir2, conn=globconn()):
